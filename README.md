@@ -1,6 +1,9 @@
 # NSW-Employment-Program-Evaluation
 # Here, I share how I went about evaluating the NSW Employment Program. I used linear regressions, multivariate analyses, clustering, bootstrapping, nearest neighbor matching, one to many matching, and propensity score matching to answer my questions.
 
+# tools used: R, MATLAB
+# libraries used: plyr, ggplot2, multiwayvcov
+
 # To follow along with any of this code, you will need to use the Lalonde.xls file.
 
 # Here is a breakdown of the data:
