@@ -18,3 +18,22 @@ summary(lm(re78~expstat, data=data))
 # tx_data <- subset(data, expstat==1)
 # And analyze using a paired t test comparing income in 1978 to income in 1974
 t.test(tx_data$re78, tx_data$re74, paired = TRUE, alternative = "two.sided")
+
+# what if i wanted to make a line graph laid out where "before NSW" and "after NSW" is on the x axis and earnings in 1978 are on the y axis?
+# it would be much easier to do if the data were restructured so that income from both years are in a single column,
+# and the year is dummy coded (0 for 74 and 1 for 78, so: before/after treatment)
+# I restructured the data like that in Excel myself in a new sheet.
+
+# read in the second sheet of the excel file as "dummy_data"
+
+summary(lm(income~dummy_year, data=dummy_data))
+# to correctly analyze, I'd need to cluster to adjust SEs. Since I have two datapoints from every participant, I'd assume their salaries,
+# treatment aside, would be more similar. That similarity between their two datapoints is not accounted for in this model, so I expect these
+# SEs to be artificially lower than they should be.
+# Here's the correction with clustering:
+library(multiwayvcov)
+tx_dummy<-lm(income~dummy_year, data=dummy_data)
+tx_dummy.vcovCL<-cluster.vcov(tx_dummy, dummy_data$ID)
+        # vcolCL = variance-covariance clustering
+                # "cluster the variance covariance matrix in the OLS model tx_dummy by ID"
+coeftest(tx_dummy, tx_dummy.vcovCL)
