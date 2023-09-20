@@ -1,0 +1,20 @@
+# first, I read in the data set into R Studio and named it "data". use the first spreadsheet in the excel file (default)
+
+# DID PARTICIPANTS IN THE NSW PROGRAM HAVE GREATER INCOME IN 1978 THAN NON PARTICIPANTS?
+# a comparison across the two groups
+
+# I'm carrying out a one sided, two-sample t test with 95% confidence
+# H0 is difference in means = 0; alt is that true difference does not equal 0 ("two.sided")
+t.test(re78~expstat, data = data, mu = 0, alt = "two.sided", paired = F, var.equal = F, conf.level = 0.95)
+
+# Now here's a linear regression that treats expstat as a factor:
+summary(lm(re78~expstat, data=data))
+
+
+# DOES PARTICIPATING IN THE PROGRAM INCREASE YOUR INCOME OVER TIME?
+# a pre/post intervention design
+
+# First, I'll subset the data into those who participated in the program
+# tx_data <- subset(data, expstat==1)
+# And analyze using a paired t test comparing income in 1978 to income in 1974
+t.test(tx_data$re78, tx_data$re74, paired = TRUE, alternative = "two.sided")
