@@ -12,19 +12,34 @@ data$married <- as.factor(data$married)
 data$nodegree <- as.factor(data$nodegree)
 
 # let's first check that features are balanced across individuals who did versus did not participate in the NSW program
+
+# density plot for age
 mu <- ddply(data, "expstat", summarise, grp.mean=mean(age))
 head(mu)
-ggplot(data, aes(x=age, color=expstat)) +
-  geom_density() +
+ggplot(data, aes(x=age, color=expstat, fill = expstat)) +
+  theme_classic() +
+  geom_density(alpha = 0.3) +
   geom_vline(data=mu, aes(xintercept=grp.mean, color=expstat),
-             linetype="dashed")
+             linetype="dashed") +
+  scale_color_manual(values=c("black", "firebrick"), guide = "none")+
+  scale_fill_manual(values=c("black", "firebrick"), labels=c('non participant', 'participant'), name = "") +
+  scale_y_continuous(expand = c(0,0)) +
+  scale_x_continuous(expand = c(0,0))
 
+# density plot for educational attainment
 mu <- ddply(data, "expstat", summarise, grp.mean=mean(educ))
-ggplot(data, aes(x=educ, color=expstat)) +
-  geom_density() +
+ggplot(data, aes(x=educ, color=expstat, fill = expstat)) +
+  theme_classic() +
+  geom_density(alpha = 0.3) +
   geom_vline(data=mu, aes(xintercept=grp.mean, color=expstat),
-             linetype="dashed")
-# based on eyeballing these data, this looks acceptable
+             linetype="dashed") +
+  scale_color_manual(values=c("black", "firebrick"), guide = "none")+
+  scale_fill_manual(values=c("black", "firebrick"), labels=c('non participant', 'participant'), name = "") +
+  scale_y_continuous(expand = c(0,0)) +
+  scale_x_continuous(expand = c(0,0)) +
+  labs(x = "educational attainment")
+
+# for the other features, I quickly plugged in the # of participants versus non participants that fell into each category into excel to make stacked bar charts quickly.
 
 # to quantitatively do a quality check on this, we can analyze group assignment as an outcome variable with OLS/Linear probability models:
 data$expstat <- as.numeric(data$expstat) # outcome variable will need to be read as a numeric variable, as this is a linear model
